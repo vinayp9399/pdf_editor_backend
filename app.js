@@ -40,6 +40,23 @@ app.post('/upload', upload.single('file'), (req, res) => {
   res.json({ filePath });
 });
 
+// Serve the fonts folder as static files
+app.use('/fonts', express.static(path.join(__dirname, 'fonts')));
+
+// Endpoint to download a specific font
+app.get('/download-font/:fontName', (req, res) => {
+  const fontName = req.params.fontName;
+  const fontPath = path.join(__dirname, 'fonts', fontName);
+
+  // Check if the font file exists
+  res.sendFile(fontPath, (err) => {
+    if (err) {
+      res.status(404).send('Font file not found');
+    }
+  });
+});
+
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.listen(5000, () => console.log('Server running on http://localhost:5000'));
+app.listen(5000, () => console.log('Server running on https://pdf-editor-backend-mgej.onrender.com'));
